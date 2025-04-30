@@ -32,6 +32,7 @@ jobs:
           rm *.md          
           node genmarkdownV2.js
           cp config.mts .vitepress/config.mts
+          cp 404.md .vitepress/404.md
 
       - name: Build VitePress site
         run: npx vitepress build
