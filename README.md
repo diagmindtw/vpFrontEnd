@@ -1,3 +1,1 @@
-# vpFrontEnd
-
-github.com/emawnag/diagmindtw
+# diagmindtw
