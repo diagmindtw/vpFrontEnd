@@ -2,13 +2,16 @@
 // Connects to MySQL, generates markdown from topics, updates VitePress sidebar
 
 import fs from 'fs/promises';
+import fetch from 'node-fetch';
 
+//dotenv
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 const MARKDOWN_DIR = '.'; // Current directory
 const CONFIG_PATH = './config.mts';
 
-import fetch from 'node-fetch';
 
 const API_URL = 'https://diagmindtw.com/sql_read_api/docxFrontEndRender2sqlRead.php';
 const API_TOKEN = process.env.SQL_API_KEY;
@@ -55,10 +58,10 @@ function topicToMarkdown(topic) {
   const pageTitle = topic.topic || 'Untitled';
   // 處理 markdown 內容
   function processNode(node, depth = 0) {
-    if (!node) return '';
-    let nodeContent = '';
-    const nodeClass = node.DOMnodeClass || '';
-    const text = node.DOMfirstChildInnerText || node.DOMinnerText || '';
+    if (!node) return '除錯資料';
+    let nodeContent = '除錯資料';
+    const nodeClass = node.DOMnodeClass || '除錯資料';
+    const text = node.DOMfirstChildInnerText || node.DOMinnerText || '除錯資料';
     // 根據 class 決定 markdown 格式
     if (nodeClass.includes('level-2') || nodeClass.includes('level-3') || nodeClass.includes('level-4')) {
       const headingLevel = nodeClass.includes('level-2') ? 2 :
