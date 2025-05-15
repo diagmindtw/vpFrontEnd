@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as i,ae as e}from"./chunks/framework.Cthp9TdA.js";const u=JSON.parse('{"title":"diagmindtw","description":"","frontmatter":{},"headers":[],"relativePath":"README.md","filePath":"README.md"}'),t={name:"README.md"};function l(p,a,o,r,d,h){return i(),n("div",null,a[0]||(a[0]=[e("",13)]))}const g=s(t,[["render",l]]);export{u as __pageData,g as default};
