@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # 手動觸發
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,11 +33,35 @@ jobs:
                      -v
 
       - name: Add CNAME for GitHub Pages
-        run: echo "vp.diagmindtw.com" > ./output/CNAME
+        run: echo "vp.diagmindtw.com" > ./output/vitepress_dist/vitepress_dist/CNAME
 
-      - name: Deploy ./output to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+      # - name: Deploy ./output to gh-pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./output/vitepress_dist/vitepress_dist
+      #     publish_branch: gh-pages
+
+     # 3. 寫入 Pages metadata
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5   # 新版 v5
+
+      # 4. 打包並上傳符合 Pages 規範的 artifact
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output/vitepress_dist/vitepress_dist
-          publish_branch: gh-pages
+          path: ./output/vitepress_dist/vitepress_dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
