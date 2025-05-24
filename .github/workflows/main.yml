@@ -41,6 +41,8 @@ jobs:
         run: |
           cd output
           cd markdown
+          npm add -D vitepress
+          npm install vue
           npx vitepress build
 
       - name: Add CNAME for GitHub Pages
