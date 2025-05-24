@@ -22,7 +22,7 @@ jobs:
         run: npm install -g onenote2md@1.2.5
 
       - name: install pubhtml
-        run: npm install -g pubhtmlhere@2.2.6
+        run: npm install -g pubhtmlhere@2.2.7
         
 
       - name: Run onenote2md
