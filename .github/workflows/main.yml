@@ -29,7 +29,7 @@ jobs:
         run: |
           onenote2md -u "https://diagmindtw.com/rawdocx/serve-docx.php?file=" \
                      -b "https://raw.githubusercontent.com/diagmind/onenote2md/refs/heads/main/kcms0.php" \
-                     -M
+                     -M -v
 
       - name: Run onenote2md
         run: |
