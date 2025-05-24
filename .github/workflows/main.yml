@@ -19,7 +19,7 @@ jobs:
           node-version: 'latest'
 
       - name: Install latest onenote2md globally
-        run: npm install -g onenote2md@1.2.8
+        run: npm install -g onenote2md@1.2.9
 
       - name: install pubhtml
         run: npm install -g pubhtmlhere@2.2.8
@@ -29,18 +29,16 @@ jobs:
         run: |
           onenote2md -u "https://diagmindtw.com/rawdocx/serve-docx.php?file=" \
                      -b "https://raw.githubusercontent.com/diagmind/onenote2md/refs/heads/main/kcms0.php" \
-                     -M \
-                     -v
+                     -M
+
+      - name: Run onenote2md
+        run: |
+          cd output
+          cd markdown
+          npx vitepress build
 
       - name: Add CNAME for GitHub Pages
-        run: echo "vp.diagmindtw.com" > ./output/vitepress_dist/vitepress_dist/CNAME
-
-      # - name: Deploy ./output to gh-pages
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./output/vitepress_dist/vitepress_dist
-      #     publish_branch: gh-pages
+        run: echo "vp.diagmindtw.com" > ./output/markdown/.vitepress/dist/CNAME
 
      # 3. 寫入 Pages metadata
       - name: Configure GitHub Pages
@@ -50,7 +48,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: . #./output/vitepress_dist/vitepress_dist
+          path: ./output/markdown/.vitepress/dist
 
   deploy:
     runs-on: ubuntu-latest
