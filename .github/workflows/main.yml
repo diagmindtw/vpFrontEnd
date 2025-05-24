@@ -44,11 +44,11 @@ jobs:
      #  - name: Configure GitHub Pages
      #    uses: actions/configure-pages@v5   # 新版 v5
 
-     #  # 4. 打包並上傳符合 Pages 規範的 artifact
-     #  - name: Upload Pages artifact
-     #    uses: actions/upload-pages-artifact@v3
-     #    with:
-     #      path: ./output/markdown/.vitepress/dist
+      # 4. 打包並上傳符合 Pages 規範的 artifact
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
   
       - name: Deploy ./output to gh-pages
         uses: peaceiris/actions-gh-pages@v3
