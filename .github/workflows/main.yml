@@ -31,6 +31,12 @@ jobs:
                      -b "https://raw.githubusercontent.com/diagmind/onenote2md/refs/heads/main/kcms0.php" \
                      -M -v
 
+            # 4. 打包並上傳符合 Pages 規範的 artifact
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
       - name: Run onenote2md
         run: |
           cd output
@@ -43,12 +49,6 @@ jobs:
      # # 3. 寫入 Pages metadata
      #  - name: Configure GitHub Pages
      #    uses: actions/configure-pages@v5   # 新版 v5
-
-      # 4. 打包並上傳符合 Pages 規範的 artifact
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
   
       - name: Deploy ./output to gh-pages
         uses: peaceiris/actions-gh-pages@v3
