@@ -1,45 +1,39 @@
-name: Build and Deploy VitePress
+name: Sync OneNote to gh-pages
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
   schedule:
-    - cron: '0 6 * * *'  # 每天 UTC 時間 6:00（等同台灣時間 14:00）
+    - cron: '0 3 * * *' # 每天凌晨3點 UTC
+  workflow_dispatch: # 手動觸發
 
 jobs:
-  build-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node.js (Latest)
         uses: actions/setup-node@v4
         with:
-          node-version: '23'
+          node-version: 'latest'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install latest onenote2md globally
+        run: npm install -g onenote2md@1.2.1
 
-      - name: Prepare VitePress config
-        env: # Or as an environment variable
-          SQL_API_KEY: ${{ secrets.SQL_API_KEY }}
+      - name: Run onenote2md
         run: |
-          mkdir -p .vitepress
-          node genmarkdownV2.js
-          cp config.mts .vitepress/config.mts        
+          onenote2md -u "https://diagmindtw.com/rawdocx/serve-docx.php?file=" \
+                     -b "https://raw.githubusercontent.com/diagmind/onenote2md/refs/heads/main/kcms0.php" \
+                     -M
+                     -v
 
-      - name: Build VitePress site
-        run: npx vitepress build
+      - name: Add CNAME for GitHub Pages
+        run: echo "vp.diagmindtw.com" > ./output/CNAME
 
-      - name: Copy CNAME for GitHub Pages
-        run: cp CNAME .vitepress/dist/CNAME
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Deploy ./output to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .vitepress/dist
+          publish_dir: ./output/vitepress_dist/vitepress_dist
+          publish_branch: gh-pages
