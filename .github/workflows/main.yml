@@ -21,6 +21,10 @@ jobs:
       - name: Install latest onenote2md globally
         run: npm install -g onenote2md@1.2.4
 
+      - name: install pubhtml
+        run: npm install -g pubhrmlhere
+        
+
       - name: Run onenote2md
         run: |
           onenote2md -u "https://diagmindtw.com/rawdocx/serve-docx.php?file=" \
