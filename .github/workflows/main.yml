@@ -18,12 +18,10 @@ jobs:
         with:
           node-version: 'latest'
 
-      - name: Install latest onenote2md globally
-        run: npm install -g onenote2md@1.2.10
-
-      - name: install pubhtml
-        run: npm install -g pubhtmlhere@2.2.8
-        
+      - name: Install latest onenote2md and pubhtml
+        run: |
+          npm install -g onenote2md@1.2.10
+          npm install -g pubhtmlhere@2.2.8
 
       - name: Run onenote2md
         run: |
@@ -31,43 +29,34 @@ jobs:
                      -b "https://raw.githubusercontent.com/diagmind/onenote2md/refs/heads/main/kcms0.php" \
                      -M -v
 
-            # 4. 打包並上傳符合 Pages 規範的 artifact
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-
-      - name: Run onenote2md
+      - name: Prepare VitePress Workspace
         run: |
           cd output
-          cd markdown
+          mkdir vitepressworkspace
+          cd vitepressworkspace
+          npm init -y
           npm add -D vitepress
-          npx vitepress build
+          npx vitepress init
+          
+          # 移除預設 example 並複製 markdown
+          rm -rf docs
+          cp -r ../markdown ./docs
+
+          # 複製 config 設定
+          mkdir -p docs/.vitepress
+          cp ../markdown/.vitepress/config.mts docs/.vitepress/config.mts
+
+      - name: Build VitePress site
+        run: |
+          cd output/vitepressworkspace
+          npx vitepress build docs
 
       - name: Add CNAME for GitHub Pages
-        run: echo "vp.diagmindtw.com" > ./output/markdown/.vitepress/dist/CNAME
+        run: echo "vp.diagmindtw.com" > ./output/vitepressworkspace/docs/.vitepress/dist/CNAME
 
-     # # 3. 寫入 Pages metadata
-     #  - name: Configure GitHub Pages
-     #    uses: actions/configure-pages@v5   # 新版 v5
-  
-      - name: Deploy ./output to gh-pages
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output/markdown/.vitepress/dist
+          publish_dir: ./output/vitepressworkspace/docs/.vitepress/dist
           publish_branch: gh-pages
-
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   environment:
-  #     name: github-pages
-  #     url: ${{ steps.deployment.outputs.page_url }}
-  #   permissions:
-  #     pages: write
-  #     id-token: write
-  #   steps:
-  #     - name: Deploy to GitHub Pages
-  #       id: deployment
-  #       uses: actions/deploy-pages@v4
