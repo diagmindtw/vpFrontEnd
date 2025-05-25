@@ -37,12 +37,26 @@ jobs:
           npm init -y
           npm add -D vitepress
           npx vitepress init
-          
+
           # 移除預設 example 並複製 markdown
           rm -rf docs
-          cp -r ../markdown ./docs
+          mkdir docs
+          
+          # 複製 markdown 並處理特殊字元 [ ]
+          find ../markdown -type f -name "*.md" | while read file; do
+            # 取得相對目錄並建立
+            rel_path="${file#../markdown/}"
+            new_path=$(dirname "$rel_path")
+            mkdir -p "docs/$new_path"
 
-          # 複製 config 設定
+            # 處理檔名中的 [] 為 【】
+            filename=$(basename "$file")
+            new_filename=$(echo "$filename" | sed 's/\[/【/g; s/\]/】/g')
+
+            cp "$file" "docs/$new_path/$new_filename"
+          done
+
+          # 複製 sidebar config
           mkdir -p docs/.vitepress
           cp ../markdown/.vitepress/config.mts docs/.vitepress/config.mts
 
