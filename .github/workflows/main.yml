@@ -26,7 +26,7 @@ jobs:
       - name: Run onenote2md
         run: |
           onenote2md -u "https://diagmindtw.com/rawdocx/serve-docx.php?file=" \
-                     -b "https://raw.githubusercontent.com/diagmind/onenote2md/refs/heads/main/kcms0.php" \
+                     -b "https://diagmindtw.com/kcms0.php#edit" \
                      -M -v
 
       - name: Prepare VitePress Workspace
