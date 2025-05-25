@@ -20,7 +20,7 @@ jobs:
 
       - name: Install latest onenote2md and pubhtml
         run: |
-          npm install -g onenote2md@1.2.10
+          npm install -g onenote2md@1.2.11
           npm install -g pubhtmlhere@2.2.8
 
       - name: Run onenote2md
@@ -37,22 +37,12 @@ jobs:
           npm init -y
           npm add -D vitepress
           npx vitepress init
-
+          
           # 移除預設 example 並複製 markdown
           rm -rf docs
-          mkdir docs
-          
-          # 複製 markdown 並處理特殊字元 [ ]
-          find ../markdown -type f -name "*.md" | while read file; do
-            # 取得相對目錄並建立
-            rel_path="${file#../markdown/}"
-            new_path=$(dirname "$rel_path")
-            mkdir -p "docs/$new_path"
+          cp -r ../markdown ./docs
 
-            cp "$file" "docs/$new_path/$new_filename"
-          done
-
-          # 複製 sidebar config
+          # 複製 config 設定
           mkdir -p docs/.vitepress
           cp ../markdown/.vitepress/config.mts docs/.vitepress/config.mts
 
