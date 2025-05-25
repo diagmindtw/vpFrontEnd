@@ -49,10 +49,6 @@ jobs:
             new_path=$(dirname "$rel_path")
             mkdir -p "docs/$new_path"
 
-            # 處理檔名中的 [] 為 【】
-            filename=$(basename "$file")
-            new_filename=$(echo "$filename" | sed 's/\[/【/g; s/\]/】/g')
-
             cp "$file" "docs/$new_path/$new_filename"
           done
 
